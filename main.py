@@ -3,17 +3,25 @@ import flet as ft
 
 def main(page: ft.Page):
     
+    first_name = ft.TextField(label='First Name', autofocus=True)
+    last_name = ft.TextField(label='Last Name')
+    greeting = ft.Column()
+    
     def button_clicked(e):
-        print(f'click {e}')
-        page.add(ft.Text("Clicked!", size=100))
+        greeting.controls.append(
+            ft.Text(f'Hello {first_name.value} {last_name.value}!')
+        )
+        first_name.value = ''
+        last_name.value = ''
         page.update()
+        first_name.focus()
+        
         
     page.add(
-        ft.Row(
-            controls=[
-                ft.Text(f'A {x}') for x in range(10)
-            ] + [ft.ElevatedButton(text="Say my name!", on_click=button_clicked)]
-        )
+        first_name,
+        last_name,
+        ft.ElevatedButton('Click', on_click=button_clicked),
+        greeting
     )
     page.update()
 
