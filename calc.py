@@ -1,15 +1,5 @@
-from flet import app, Container, colors, Row, Column, Page, Text, ElevatedButton
+from flet import app, Container, colors, Row, Column, Page, Text, ElevatedButton, WEB_BROWSER
 
-
-def definition_button(text: str, color: colors=colors.BLACK, 
-                      bgcolor: colors=colors.BLUE_GREY_100, expand=1) -> ElevatedButton:
-    return ElevatedButton(
-        text=text,
-        data=text,        
-        bgcolor=bgcolor,
-        color=color,
-        expand=expand,
-    )
 
 def main(page: Page) -> None:
     page.title = 'My Calc Flet'
@@ -17,6 +7,27 @@ def main(page: Page) -> None:
     page.window_width = 300
 
     result = Text(value='0') 
+
+    def click_action(e) -> None:
+        data = e.control.data
+        if result.value == "Error" or data == "AC":
+            result.value = "0"
+            reset()
+
+        elif data in ("1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "."):
+            result.value += data
+            result.update()
+
+    def definition_button(text: str, color: colors=colors.BLACK, 
+                        bgcolor: colors=colors.BLUE_GREY_100, expand=1) -> ElevatedButton:
+        return ElevatedButton(
+            text=text,
+            data=text,        
+            bgcolor=bgcolor,
+            color=color,
+            expand=expand,
+            on_click=lambda e: click_action(e)
+        )
     
     page.add(
         Container(
@@ -92,4 +103,4 @@ def main(page: Page) -> None:
     )
     )
 
-app(target=main)
+app(target=main, port=8080, view=WEB_BROWSER)
